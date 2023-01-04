@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tiles</title>
+
+
+    <script src="libs/jquery-1.11.1.js"></script>
+    <link rel="stylesheet" href="libs/leaflet.1.0.3.css"/>
+
+     <script src="libs/leaflet.1.0.3.js"></script>
+     <script src="libs/leaflet.ajax.min.js"></script>
+
+</head>
+<style>
+    #map { width: 100%; height: 100vh; }
+    
+</style>
+<body>
+    <div id="map"></div>
+
+    <script>
+        var map = L.map('map').setView([50.515150, 30.228960], 16);
+        L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
+    maxZoom: 18,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+
+L.tileLayer('https://thallium.texty.org.ua/maps/destruction/tiles_webp/{z}/{x}/{y}.webp', {
+    maxZoom: 18,
+    minZoom: 16,
+    attribution: '© Planet.com'
+}).addTo(map);
+
+var exteriorStyle = {
+   
+    weight: 3,
+    fillOpacity: 0,
+    opacity: 0.3,
+    fillColor: "#00FF00",
+    color: "#00FF00"
+   
+};
+
+
+/* полігон з окупованими територіями */
+$.getJSON("data/test.geojson",function(military){
+       var geoJsonLayer = L.geoJson(military, { style: function(){ return exteriorStyle}} );     
+
+           map.addLayer(geoJsonLayer);
+
+           geoJsonLayer.setStyle(exteriorStyle);
+   });
+
+
+
+    </script>
+
+    
+</body>
+</html>
