@@ -25,6 +25,7 @@
         var map = L.map('map').setView([50.515150, 30.228960], 16);
         L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"', {
     maxZoom: 18,
+    minZoom: 14,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
@@ -34,6 +35,18 @@ L.tileLayer('https://thallium.texty.org.ua/maps/destruction/tiles_webp/{z}/{x}/{
     minZoom: 16,
     attribution: '© Planet.com'
 }).addTo(map);
+
+
+var south_west = L.latLng(50.415150, 30.178960),
+    north_east = L.latLng(50.535150, 30.238960);
+var bounds = L.latLngBounds(south_west, north_east);
+
+map.setMaxBounds(bounds);
+map.on('drag', function() {
+    map.panInsideBounds(bounds, { animate: true });
+});
+
+
 
 var exteriorStyle = {
    
