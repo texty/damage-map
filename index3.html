@@ -71,8 +71,8 @@ var { MapboxLayer, HexagonLayer, MapboxLayer, ScatterplotLayer, H3HexagonLayer }
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'data/osm_liberty.json',
-    center: [ 37.5, 48],
-    zoom: 6,
+    center: [ 39.1, 48.5],
+    zoom: 10,
     pitch: 60,
     antialias: true
 });
@@ -161,7 +161,6 @@ map.on('load', () => {
             opacity: 1
       }), firstLabelLayerId);
 
-    
     });
 
 
