@@ -6,115 +6,169 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <script src="https://unpkg.com/h3-js@3.7.2"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
-    <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
+    <script src="libs/jquery-1.11.1.js"></script>
+    <link rel="stylesheet" href="libs/leaflet.1.0.3.css"/>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//unpkg.com/leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css"
+    type="text/css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.4.0/d3.min.js" integrity="sha512-uEB5VA2mmiakiYbFIvXE2n5h0BBWxAHp1UPEK2eHSpHbxJkzxbQ9HmmLBqS+Iwhwh35r2CC34HMdWmqHoibTuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     <script src="libs/leaflet.1.0.3.js"></script>
+     <script src="libs/leaflet.ajax.min.js"></script>
+     <script src="//unpkg.com/leaflet-gesture-handling"></script>
+
+
+     <script src="https://unpkg.com/h3-js@^3.0.0"></script>
+     <script src="https://unpkg.com/deck.gl@~7.3.2/dist.min.js"></script>
+     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+
+     <script src="https://d3js.org/d3.v5.min.js"></script>
+
+
+
 </head>
 <style>
-     body {
-    margin: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  .deck-tooltip {
-    font-size: 0.8em;
-    font-family: Helvetica, Arial, sans-serif;
-  }
 
-  #container {
-    width: 100vw; height: 100vh;
-  }
+    main {
+        position: relative;
+        height: 110vh;
+    }
 
+    /* hexbin h3 */
+    #map { 
+        position: absolute;
+        top: 0;
+        left: 0;
+        width:100%;
+        height: 100vh; 
+        margin: auto;
+    }
+
+    body {
+        font-family: Helvetica, Arial, sans-serif;
+        width: 100vw;
+        /* height: 100vh; */
+        margin: 0;
+        padding: 0
+    }
+
+    #control-panel {
+        position: absolute;
+        background: #fff;
+        top: 0;
+        left: 0;
+        margin: 12px;
+        padding: 20px;
+        font-size: 12px;
+        line-height: 1.5;
+        z-index: 1;
+    }
+
+    label {
+        display: inline-block;
+        width: 140px;
+    }
+
+    #tooltip {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        background-color: white;
+        padding: 5px;
+        font-size: 12px;
+    }
+
+/* leaflet */
+    #map-container {
+        position: relative;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+#mymap { width: 100%; height: 100vh; }
+
+
+#select-list {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+
+.select-place {
+    padding: 5px;
+    cursor: pointer;
+    width: 200px;
+    background-color: blanchedalmond;
+}
+
+.text {
+    max-width: 600px;
+    margin: 50px auto;
+}
 </style>
 <body>
 
-    <button id="to3D">to 3D</button>
-    <button id="to2D" >to 2D</button>
-    <div id="container"></div>
-
-    <script>
-
-        const {DeckGL, H3HexagonLayer, FlyToInterpolator} = deck;
-
-        function getRGB(str){
-            var match = str.match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d?))\))?/);
-            return match ? [ +match[1], +match[2], +match[3]]
-            : {};
-            }
-
-        var color = d3.scaleLinear()
-            .domain([0, 1, 5, 10, 15, 30])
-            .range(["#ffffb2", "#fed976", "#feb24c", "#fd8d3c", "#fc4e2a", "#e31a1c", "#b10026"]);
-
-        var color2 = d3.scaleLinear()
-            .domain([0, 5, 15, 20, 25, 80])
-            .range(["#ffffb2", "#fed976", "#feb24c", "#fd8d3c", "#fc4e2a", "#e31a1c", "#b10026"]);
+    <main>
+        <div id="map"></div>
+        <div id='tooltip'></div>
+    </main>
 
 
-        const layer1 = new H3HexagonLayer({
-            id: 'H3HexagonLayer',
-            data: 'https://raw.githubusercontent.com/samoylich/damage_map_data/main/mariupol.json',
-            elevationScale: 20,
-            extruded: true,
-            filled: true,
-            getElevation: d => d.count,
-            getFillColor: d => getRGB(color(d.count)),
-            getHexagon: d => d.hex,
-            wireframe: false,
-            pickable: true,
-            visible: true,
-            opacity: 0.7,
-        });
+<p class="text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
 
-        const layer2 = new H3HexagonLayer({
-            id: 'H3HexagonLayer',
-            data: 'https://raw.githubusercontent.com/samoylich/damage_map_data/main/mariupol(10).json',
-            elevationScale: 20,
-            extruded: true,
-            filled: true,
-            getElevation: d => d.count * 2,
-            getFillColor: d => getRGB(color2(d.count)),
-            getHexagon: d => d.hex,
-            wireframe: false,
-            pickable: true,
-            visible: true
-        });
+<div id="map-container">
+    <div id="select-list">
+        <p class="select-place" onclick="flyToLocation('irpin')">Ірпінь (click to try)</p>
+        <p class="select-place" onclick="flyToLocation('izum')">Ізюм (click to try)</p>
+        <p class="select-place" onclick="flyToLocation('novodru')">Новодружеськ (click to try)</p>
+        <p class="select-place" onclick="flyToLocation('dmytrivka')">Дмитрівка (click to try)</p>
+        <p>Brazhivka <br>
+            Drujne <br>
+            avdiivka <br>
+            bila_krynyz2 <br>
+            bila_krynyz_ <br>
+            borodjanka <br>
+            dergachi <br>
+            dovhenke <br>
+            kamjanske <br>
+            kreminna  <br>
+            lyman  <br>
+            lyman2 <br>
+            novomyha <br>
+            novotoshiv <br>
+            nurkove <br>
+            osokorivka <br>
+            poltavka <br>
+            popasna <br>
+            prud <br>
+            prudne <br>
+            rogan <br>
+            rubizhne <br>
+            rubzi <br>
+            severodoneck <br>
+            siversk <br>
+            sviatohirsk <br>
+            svitanok <br>
+            toshkivka <br>
+            travneve <br>
+            udy <br>
+            velyka_komysha <br>
+            velyka_olexan <br>
+            vilhivka <br>
+            volnovakha <br>
+            vrubivka <br>
+            yagidne</p>
 
-      
-        const mydeck = new DeckGL({
-            container: 'container',
-        mapStyle: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-        initialViewState: {
-            longitude: 37.5,
-            latitude: 47,
-            zoom: 10,
-            maxZoom: 20,
-            pitch: 0,
-            bearing: 0
-        },
-        onViewStateChange: ({viewState}) => {
-            if(viewState.zoom > 11){
-                mydeck.setProps({layers: [layer2]})
-                return {...viewState, pitch: 60}
-               
-            } else {
-                mydeck.setProps({layers: [layer1]})
-                return  {...viewState, pitch: 0}
+    </div>
+    <div id="mymap"></div>
+</div>
 
-            }
-                
-        },
-        
-        controller: true,
-        getTooltip: ({object}) => object && `пошкоджено: ${Math.round(object.count)} %`,
-        layers: [layer1]
-    });
 
-            </script>
-            
-        </body>
- </html>
+
+    <!-- Local -->
+    <script src="js/rects.js"></script>
+    <script src="js/hex-map.js"></script>
+
+    
+</body>
+</html>
