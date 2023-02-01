@@ -8,65 +8,201 @@
 
 
     <script src="libs/jquery-1.11.1.js"></script>
-    <link rel="stylesheet" href="libs/leaflet.1.0.3.css"/>
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- <link rel="stylesheet" href="libs/leaflet.1.0.3.css"/>
 
      <script src="libs/leaflet.1.0.3.js"></script>
      <script src="libs/leaflet.ajax.min.js"></script>
+     <script src="libs/leaflet-providers.js"></script>
+     <scipt src="libs/leaflet-bing-layer.min.js"></scipt> -->
+
 
 </head>
 <style>
+    #map-container {
+        display: grid;
+        grid-template-columns: 1fr 4fr;
+    }
     #map { width: 100%; height: 100vh; }
+
+
+    #select-list {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
     
+
+    .select-place {
+        padding: 5px;
+        cursor: pointer;
+        width: 200px;
+        background-color: blanchedalmond;
+    }
 </style>
 <body>
-    <div id="map"></div>
+      
+     <div id="map"></div>
+   
+   
 
-    <script>
-        var map = L.map('map').setView([50.515150, 30.228960], 16);
-        L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"', {
+<script>
+    var TILES_ROOT = 'https://thallium.texty.org.ua/maps/destruction/'
+
+
+
+    const dictionary = {
+    irpin: {"squares": "irpin", "tiles": "irpin", "coords": [50.5378718,30.26321411132813]},
+    izum: {"squares": "izum", "tiles": "izum", "coords": [49.2050372,37.2680282]},
+    novodru: {"squares": "novodru", "tiles": "novodru", "coords": [48.96219529451843,38.35492171347142]},
+    dmytrivka: {"squares": "dmytrivka", "tiles": "dmytrivka", "coords": [50.4706167956567,30.209312438964847]},
+}
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiZXZnZXNoYWRyb3pkb3ZhIiwiYSI6ImNqMjZuaGpkYTAwMXAzMm5zdGVvZ2c0OHYifQ.s8MMs2wW15ZyUfDhTS_cdQ';
+
+//Create the Mapbox map
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'data/osm_liberty.json',
+    center: [ 38.5, 49.0],
+    zoom: 10,
+    pitch: 0,
+    minZoom: 5,
     maxZoom: 18,
-    minZoom: 14,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
 
-
-L.tileLayer('https://thallium.texty.org.ua/maps/destruction/tiles_webp/{z}/{x}/{y}.webp', {
-    maxZoom: 18,
-    minZoom: 16,
-    attribution: '© Planet.com'
-}).addTo(map);
-
-
-var south_west = L.latLng(50.415150, 30.178960),
-    north_east = L.latLng(50.535150, 30.238960);
-var bounds = L.latLngBounds(south_west, north_east);
-
-map.setMaxBounds(bounds);
-map.on('drag', function() {
-    map.panInsideBounds(bounds, { animate: true });
+    antialias: true
 });
 
+const layers = [ "Brazhivka", 'Drujne', 'avdiivka', 'bila_krynyz2', "bila_krynyz_", "borodjanka","dergachi", "dmytrivka", 'dovhenke','irpin', 'izum', 'kamjanske', 'kreminna', 'lyman','lyman2','novodru','novomyha','novotoshiv','nurkove','osokorivka','poltavka','popasna','prud','prudne','rogan', 'rubizhne','rubzi','severodoneck','siversk','sviatohirsk','svitanok','toshkivka','travneve','udy','velyka_komysha','velyka_olexan','vilhivka','volnovakha','vrubivka','yagidne']
+
+// const layers = [
+//     // "dmytrivka",
+//     'irpin', 
+//     'severodoneck'
+// ]
 
 
-var exteriorStyle = {
+map.on('load', () => {
+
+    const firstLabelLayerId = map.getStyle().layers.find(layer => layer.type === 'symbol').id;
+
+
+    for(LAYER of layers ){
+            //знімки
+            map.addSource(LAYER+ "_s",{ 
+            'type': 'raster', 
+            'tiles': [TILES_ROOT + '/'+ LAYER +'/{z}/{x}/{y}.webp'], 
+            'tileSize': 200 
+        })
+
+        map.addLayer({
+            'id': LAYER, 
+            'type': 'raster', 
+            'source': LAYER+ "_s", 
+            "minzoom": 16, 
+            "maxzoom": 19 
+        });
+
+
+
+
+
+}
    
-    weight: 3,
-    fillOpacity: 0,
-    opacity: 0.3,
-    fillColor: "#00FF00",
-    color: "#00FF00"
+
+
+
+
+    map.addSource("polygon", {
+        "type": "geojson",
+        'data': "data/rects/reprojected/grid_all.geojson"
+    });
+
+    //polygon stroke
+    map.addLayer({
+        "id": "fill-layer",
+        "minzoom": 5,
+        "maxzoom": 16,
+        'type': 'fill',
+        "source": "polygon",
+        'paint': {
+            'fill-color': '#F26344',
+            'fill-opacity': 0.1
+            // 'line-width': 2
+        }
+    });
+
+    map.addLayer({
+        "id": "stroke-layer",
+        "minzoom": 5,
+        "maxzoom": 19,
+        'type': 'line',
+        "source": "polygon",
+        'paint': {
+            'line-color': '#F26344',
+             'line-width': 2
+        }
+    });
+
+    // var satelite = L.tileLayer('https://thallium.texty.org.ua/maps/destruction/irpin/{z}/{x}/{y}.webp', {
+    //     maxZoom: 19,
+    //     minZoom: 16,
+    //     attribution: '© Planet.com'
+    // })
+
+})
+
+
+
+
+
+// var south_west = L.latLng(50.415150, 30.178960),
+//     north_east = L.latLng(50.535150, 30.238960);
+// var bounds = L.latLngBounds(south_west, north_east);
+
+
+
+// map.on('click', function(e){
+//   var coord = e.latlng;
+//   var lat = coord.lat;
+//   var lng = coord.lng;
+//   console.log(lat + "," + lng);
+//   });
+
+// var geoJsonLayer;
+
+// function flyToLocation(dataValue){
+//     map.flyTo(dictionary[dataValue].coords, 12);
+// }
+
+// var exteriorStyle = {
+//     weight: 3,
+//     fillOpacity: 0,
+//     opacity: 0.7,
+//     fillColor: "#00FF00",
+//     color: "red"
    
-};
+// };
 
 
 /* полігон з окупованими територіями */
-$.getJSON("data/test.geojson",function(military){
-       var geoJsonLayer = L.geoJson(military, { style: function(){ return exteriorStyle}} );     
+// $.getJSON("data/rects/reprojected/grid_all.geojson",function(military){
+//    geoJsonLayer = L.geoJson(military);     
+//         map.addLayer(geoJsonLayer);
+//         geoJsonLayer.setStyle(exteriorStyle);
+// });
 
-           map.addLayer(geoJsonLayer);
+// $.getJSON("data/rects/reprojected/dmytrivka.geojson",function(military){
+//     var geoJsonLayer = L.geoJson(military, { style: function(){ return exteriorStyle}} );     
+//         map.addLayer(geoJsonLayer);
+//         geoJsonLayer.setStyle(exteriorStyle);
+// });
 
-           geoJsonLayer.setStyle(exteriorStyle);
-   });
+//    map.on("zoom", function(){
+//     console.log(map.getZoom())
+//    })
 
 
 
