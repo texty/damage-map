@@ -44,7 +44,8 @@
 </style>
 <body>
       
-    <h2>Тестово можна зумитись на Ірпінь, Дмитрівку (південіше Ірпіня), Ізюм та Cєвєвродонецьк. Сєвєродонецьк не грузить тайли. </h2>
+    <h2>Тестово можна зумитись на Ірпінь, Дмитрівку (південіше Ірпіня), Ізюм, Brazhivka (під Ізюом), Дружне та Северодонецьк. З них не працюють тайли Дружне (Drujne) та Северодонецьк (severodoneck). 
+        Інші міста в процесі перевірки. </h2>
      <div id="map"></div>
    
    
@@ -78,14 +79,15 @@ var map = new mapboxgl.Map({
 
 // const layers = [ "Brazhivka", 'Drujne', 'avdiivka', 'bila_krynyz2', "bila_krynyz_", "borodjanka","dergachi", "dmytrivka", 'dovhenke','irpin', 'izum', 'kamjanske', 'kreminna', 'lyman','lyman2','novodru','novomyha','novotoshiv','nurkove','osokorivka','poltavka','popasna','prud','prudne','rogan', 'rubizhne','rubzi','severodoneck','siversk','sviatohirsk','svitanok','toshkivka','travneve','udy','velyka_komysha','velyka_olexan','vilhivka','volnovakha','vrubivka','yagidne']
 
-const layers = [ "dmytrivka", 'irpin','severodoneck', 'izum']
+const layers = [ "dmytrivka", 'irpin','severodoneck', 'izum', "Brazhivka", 'Drujne']
 
 const limits = {
     'dmytrivka': [30.1757653834394048,50.4108237576306948,30.2817654637024489,50.5286078919058284],
     'irpin': [30.0026654838079381,50.4621881806920669,30.4302610825765854,50.6402713180371578],
     'severodoneck': [38.3957238594277968,48.9225949548412160,38.5664048439014522,48.9910195957576917],
-    'izum': [37.2096495735259651,49.1224990970269673,37.3066673915239377,49.3348602745883156]
-
+    'izum': [37.2096495735259651,49.1224990970269673,37.3066673915239377,49.3348602745883156],
+    'Brazhivka': [37.2028126287910297,48.9848515750602758,37.2585110972821596,49.0496557099395716],
+    'Drujne': [33.1765338286155256,46.3497557357709269,33.2519912590703939,46.5626424951541651]
 }
 
 // const layers = [
