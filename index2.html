@@ -44,6 +44,7 @@
 </style>
 <body>
       
+    <h2>Cєвєвродонецьк не грузить тайли</h2>
      <div id="map"></div>
    
    
@@ -75,7 +76,17 @@ var map = new mapboxgl.Map({
     antialias: true
 });
 
-const layers = [ "Brazhivka", 'Drujne', 'avdiivka', 'bila_krynyz2', "bila_krynyz_", "borodjanka","dergachi", "dmytrivka", 'dovhenke','irpin', 'izum', 'kamjanske', 'kreminna', 'lyman','lyman2','novodru','novomyha','novotoshiv','nurkove','osokorivka','poltavka','popasna','prud','prudne','rogan', 'rubizhne','rubzi','severodoneck','siversk','sviatohirsk','svitanok','toshkivka','travneve','udy','velyka_komysha','velyka_olexan','vilhivka','volnovakha','vrubivka','yagidne']
+// const layers = [ "Brazhivka", 'Drujne', 'avdiivka', 'bila_krynyz2', "bila_krynyz_", "borodjanka","dergachi", "dmytrivka", 'dovhenke','irpin', 'izum', 'kamjanske', 'kreminna', 'lyman','lyman2','novodru','novomyha','novotoshiv','nurkove','osokorivka','poltavka','popasna','prud','prudne','rogan', 'rubizhne','rubzi','severodoneck','siversk','sviatohirsk','svitanok','toshkivka','travneve','udy','velyka_komysha','velyka_olexan','vilhivka','volnovakha','vrubivka','yagidne']
+
+const layers = [ "dmytrivka", 'irpin','severodoneck', 'izum']
+
+const limits = {
+    'dmytrivka': [30.1757653834394048,50.4108237576306948,30.2817654637024489,50.5286078919058284],
+    'irpin': [30.0026654838079381,50.4621881806920669,30.4302610825765854,50.6402713180371578],
+    'severodoneck': [38.3957238594277968,48.9225949548412160,38.5664048439014522,48.9910195957576917],
+    'izum': [37.2096495735259651,49.1224990970269673,37.3066673915239377,49.3348602745883156]
+
+}
 
 // const layers = [
 //     // "dmytrivka",
@@ -93,8 +104,9 @@ map.on('load', () => {
             //знімки
             map.addSource(LAYER+ "_s",{ 
             'type': 'raster', 
-            'tiles': [TILES_ROOT + '/'+ LAYER +'/{z}/{x}/{y}.webp'], 
-            'tileSize': 200 
+            'tiles': [TILES_ROOT + LAYER +'/{z}/{x}/{y}.webp'], 
+            'tileSize': 200,
+            'bounds':  limits[LAYER]
         })
 
         map.addLayer({
