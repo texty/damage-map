@@ -131,6 +131,7 @@
       "source": "openmaptiles",
       "source-layer": "landuse",
       "filter": ["==", "class", "hospital"],
+      "layout": {"visibility": "none"},
       "paint": {"fill-color": "#fde"}
     },
     {
@@ -162,7 +163,7 @@
       "source": "openmaptiles",
       "source-layer": "waterway",
       "filter": ["all", ["==", "class", "river"], ["!=", "brunnel", "tunnel"]],
-      "layout": {"line-cap": "round"},
+      "layout": {"line-cap": "round", "visibility": "none"},
       "paint": {
         "line-color": "rgba(218, 226, 230, 1)",
         "line-width": {"base": 1.2, "stops": [[11, 0.5], [20, 6]]}
@@ -186,6 +187,7 @@
       "source": "openmaptiles",
       "source-layer": "water",
       "filter": ["all", ["!=", "brunnel", "tunnel"]],
+      "layout": {"visibility": "visible"},
       "paint": {"fill-color": "rgba(218, 226, 230, 1)"}
     },
     {
@@ -249,7 +251,7 @@
         ["==", "ramp", 1],
         ["==", "brunnel", "tunnel"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#e9ac77",
         "line-dasharray": [0.5, 0.25],
@@ -269,7 +271,7 @@
         ["==", "brunnel", "tunnel"],
         ["in", "class", "service", "track"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#cfcdca",
         "line-dasharray": [0.5, 0.25],
@@ -282,7 +284,7 @@
       "source": "openmaptiles",
       "source-layer": "transportation",
       "filter": ["all", ["==", "ramp", 1], ["==", "brunnel", "tunnel"]],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#e9ac77",
         "line-width": {
@@ -301,7 +303,7 @@
         ["==", "brunnel", "tunnel"],
         ["in", "class", "street", "street_limited"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#cfcdca",
         "line-opacity": {"stops": [[12, 0], [12.5, 1]]},
@@ -321,7 +323,7 @@
         ["==", "brunnel", "tunnel"],
         ["in", "class", "secondary", "tertiary"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#e9ac77",
         "line-width": {"base": 1.2, "stops": [[8, 1.5], [20, 17]]}
@@ -337,7 +339,7 @@
         ["==", "brunnel", "tunnel"],
         ["in", "class", "primary", "trunk"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#e9ac77",
         "line-width": {
@@ -357,7 +359,7 @@
         ["!=", "ramp", 1],
         ["==", "brunnel", "tunnel"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#e9ac77",
         "line-dasharray": [0.5, 0.25],
@@ -378,6 +380,7 @@
         ["==", "brunnel", "tunnel"],
         ["in", "class", "path", "pedestrian"]
       ],
+      "layout": {"visibility": "none"},
       "paint": {
         "line-color": "hsl(0, 0%, 100%)",
         "line-dasharray": [1, 0.75],
@@ -395,7 +398,7 @@
         ["==", "ramp", 1],
         ["==", "brunnel", "tunnel"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#fc8",
         "line-width": {
@@ -414,7 +417,7 @@
         ["==", "brunnel", "tunnel"],
         ["in", "class", "service", "track"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#fff",
         "line-width": {"base": 1.2, "stops": [[15.5, 0], [16, 2], [20, 7.5]]}
@@ -426,7 +429,7 @@
       "source": "openmaptiles",
       "source-layer": "transportation",
       "filter": ["all", ["==", "ramp", 1], ["==", "brunnel", "tunnel"]],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#fff4c6",
         "line-width": {
@@ -441,7 +444,7 @@
       "source": "openmaptiles",
       "source-layer": "transportation",
       "filter": ["all", ["==", "brunnel", "tunnel"], ["in", "class", "minor"]],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#fff",
         "line-width": {"base": 1.2, "stops": [[13.5, 0], [14, 2.5], [20, 11.5]]}
@@ -457,7 +460,7 @@
         ["==", "brunnel", "tunnel"],
         ["in", "class", "secondary", "tertiary"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#fff4c6",
         "line-width": {"base": 1.2, "stops": [[6.5, 0], [7, 0.5], [20, 10]]}
@@ -473,7 +476,7 @@
         ["==", "brunnel", "tunnel"],
         ["in", "class", "primary", "trunk"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#fff4c6",
         "line-width": {"base": 1.2, "stops": [[5, 0], [7, 1], [20, 18]]}
@@ -490,7 +493,7 @@
         ["!=", "ramp", 1],
         ["==", "brunnel", "tunnel"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#ffdaa6",
         "line-width": {"base": 1.2, "stops": [[5, 0], [7, 1], [20, 18]]}
@@ -502,6 +505,7 @@
       "source": "openmaptiles",
       "source-layer": "transportation",
       "filter": ["all", ["==", "brunnel", "tunnel"], ["in", "class", "rail"]],
+      "layout": {"visibility": "none"},
       "paint": {
         "line-color": "#bbb",
         "line-width": {"base": 1.4, "stops": [[14, 0.4], [15, 0.75], [20, 2]]}
@@ -513,6 +517,7 @@
       "source": "openmaptiles",
       "source-layer": "transportation",
       "filter": ["all", ["==", "brunnel", "tunnel"], ["==", "class", "rail"]],
+      "layout": {"visibility": "none"},
       "paint": {
         "line-color": "#bbb",
         "line-dasharray": [0.2, 8],
@@ -529,6 +534,7 @@
         ["==", "brunnel", "tunnel"],
         ["in", "class", "transit"]
       ],
+      "layout": {"visibility": "none"},
       "paint": {
         "line-color": "#bbb",
         "line-width": {"base": 1.4, "stops": [[14, 0.4], [15, 0.75], [20, 2]]}
@@ -544,6 +550,7 @@
         ["==", "brunnel", "tunnel"],
         ["==", "class", "transit"]
       ],
+      "layout": {"visibility": "none"},
       "paint": {
         "line-color": "#bbb",
         "line-dasharray": [0.2, 8],
@@ -1082,7 +1089,7 @@
         ["==", "brunnel", "bridge"],
         ["in", "class", "secondary", "tertiary"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#e9ac77",
         "line-width": {"base": 1.2, "stops": [[8, 1.5], [20, 17]]}
@@ -1098,7 +1105,7 @@
         ["==", "brunnel", "bridge"],
         ["in", "class", "primary", "trunk"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#e9ac77",
         "line-width": {
@@ -1217,7 +1224,7 @@
         ["==", "brunnel", "bridge"],
         ["in", "class", "secondary", "tertiary"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#fea",
         "line-width": {"base": 1.2, "stops": [[6.5, 0], [7, 0.5], [20, 10]]}
@@ -1233,7 +1240,7 @@
         ["==", "brunnel", "bridge"],
         ["in", "class", "primary", "trunk"]
       ],
-      "layout": {"line-join": "round"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "#fea",
         "line-width": {"base": 1.2, "stops": [[5, 0], [7, 1], [20, 18]]}
@@ -1315,8 +1322,10 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "building",
-      "minzoom": 13,
-      "maxzoom": 14,
+      "minzoom": 16,
+      "maxzoom": 18,
+      "layout": {"visibility": "none"},
+
       "paint": {
         "fill-color": "hsl(35, 8%, 85%)",
         "fill-outline-color": {
@@ -1330,7 +1339,8 @@
       "type": "fill-extrusion",
       "source": "openmaptiles",
       "source-layer": "building",
-      "minzoom": 14,
+      "minzoom": 16,
+      "layout": {"visibility": "none"},
       "paint": {
         "fill-extrusion-color": "hsl(35, 8%, 85%)",
         "fill-extrusion-height": {
@@ -1351,7 +1361,7 @@
       "source-layer": "boundary",
       "minzoom": 8,
       "filter": ["all", ["in", "admin_level", 3, 4]],
-      "layout": {"line-join": "round", "visibility": "visible"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "rgba(189, 189, 189, 1)",
         "line-dasharray": [5, 1],
@@ -1405,7 +1415,8 @@
         "text-font": ["Roboto Regular"],
         "text-max-width": 5,
         "text-size": 12,
-        "symbol-placement": "line"
+        "symbol-placement": "line",
+        "visibility": "none"
       },
       "paint": {
         "text-color": "#5d60be",
@@ -1437,6 +1448,7 @@
       "source": "openmaptiles",
       "source-layer": "poi",
       "minzoom": 16,
+      "maxzoom": 16,
       "filter": ["all", ["==", "$type", "Point"], [">=", "rank", 20]],
       "layout": {
         "icon-image": "{class}_11",
@@ -1445,7 +1457,8 @@
         "text-font": ["Roboto Condensed Italic"],
         "text-max-width": 9,
         "text-offset": [0, 0.6],
-        "text-size": 12
+        "text-size": 12,
+        "visibility":"none"
       },
       "paint": {
         "text-color": "#666",
@@ -1473,7 +1486,8 @@
         "text-font": ["Roboto Condensed Italic"],
         "text-max-width": 9,
         "text-offset": [0, 0.6],
-        "text-size": 12
+        "text-size": 12,
+        "visibility":"none"
       },
       "paint": {
         "text-color": "#666",
@@ -1487,7 +1501,8 @@
       "type": "symbol",
       "source": "openmaptiles",
       "source-layer": "poi",
-      "minzoom": 14,
+      "minzoom": 15,
+      "maxzoom": 17,
       "filter": [
         "all",
         ["==", "$type", "Point"],
@@ -1498,14 +1513,14 @@
         "icon-image": "{class}_11",
         "text-anchor": "top",
         "text-field": "{name}",
-        "text-font": ["Roboto Condensed Italic"],
+        "text-font": ["Roboto Bold"],
         "text-max-width": 9,
         "text-offset": [0, 0.6],
         "text-size": 12
       },
       "paint": {
         "text-color": "#666",
-        "text-halo-blur": 0.5,
+        "text-halo-blur": 0.9,
         "text-halo-color": "#ffffff",
         "text-halo-width": 1
       }
@@ -1598,7 +1613,8 @@
         "text-letter-spacing": 0.1,
         "text-max-width": 9,
         "text-size": {"base": 1.2, "stops": [[12, 10], [15, 14]]},
-        "text-transform": "uppercase"
+        "text-transform": "uppercase",
+        "visibility": "none"
       },
       "paint": {
         "text-color": "#633",
@@ -1616,8 +1632,7 @@
         "text-field": "{name:uk}",
         "text-font": ["Roboto Regular"],
         "text-max-width": 8,
-        "text-size": {"base": 1.2, "stops": [[10, 12], [15, 22]]},
-        "visibility": "none"
+        "text-size": {"base": 1.2, "stops": [[10, 12], [15, 22]]}
       },
       "paint": {
         "text-color": "#333",
@@ -1638,7 +1653,7 @@
         "text-font": ["Roboto Regular"],
         "text-max-width": 8,
         "text-offset": [0, 0],
-        "text-size": {"base": 1.2, "stops": [[7, 12], [11, 16]]}
+        "text-size": {"base": 1.2, "stops": [[7, 10], [11, 12]]}
       },
       "paint": {
         "text-color": "#333",
@@ -1660,7 +1675,7 @@
         "text-font": ["Roboto Medium"],
         "text-max-width": 8,
         "text-offset": [0, 0],
-        "text-size": {"base": 1.2, "stops": [[7, 14], [11, 24]]},
+        "text-size": {"base": 1.2, "stops": [[7, 14], [11, 18]]},
         "icon-allow-overlap": true,
         "icon-optional": false,
         "visibility": "visible"

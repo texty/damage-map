@@ -44,23 +44,12 @@
 </style>
 <body>
       
-    <p style="max-width:800px; margin: 30px auto">Тестово можна зумитись на Ірпінь, Дмитрівку (південіше Ірпіня), Ізюм, Brazhivka (під Ізюом), Дружне та Северодонецьк. З них не працюють тайли Дружне (Drujne) та Северодонецьк (severodoneck). 
-        Інші міста в процесі перевірки. </p>
      <div id="map"></div>
    
    
 
 <script>
     var TILES_ROOT = 'https://thallium.texty.org.ua/maps/destruction/'
-
-
-
-    const dictionary = {
-    irpin: {"squares": "irpin", "tiles": "irpin", "coords": [50.5378718,30.26321411132813]},
-    izum: {"squares": "izum", "tiles": "izum", "coords": [49.2050372,37.2680282]},
-    novodru: {"squares": "novodru", "tiles": "novodru", "coords": [48.96219529451843,38.35492171347142]},
-    dmytrivka: {"squares": "dmytrivka", "tiles": "dmytrivka", "coords": [50.4706167956567,30.209312438964847]},
-}
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZXZnZXNoYWRyb3pkb3ZhIiwiYSI6ImNqMjZuaGpkYTAwMXAzMm5zdGVvZ2c0OHYifQ.s8MMs2wW15ZyUfDhTS_cdQ';
 
@@ -77,24 +66,50 @@ var map = new mapboxgl.Map({
     antialias: true
 });
 
-// const layers = [ "Brazhivka", 'Drujne', 'avdiivka', 'bila_krynyz2', "bila_krynyz_", "borodjanka","dergachi", "dmytrivka", 'dovhenke','irpin', 'izum', 'kamjanske', 'kreminna', 'lyman','lyman2','novodru','novomyha','novotoshiv','nurkove','osokorivka','poltavka','popasna','prud','prudne','rogan', 'rubizhne','rubzi','severodoneck','siversk','sviatohirsk','svitanok','toshkivka','travneve','udy','velyka_komysha','velyka_olexan','vilhivka','volnovakha','vrubivka','yagidne']
-
-const layers = [ "dmytrivka", 'irpin','severodoneck', 'izum', "Brazhivka", 'Drujne']
+const layers = ["avdiivka", "borodjanka", "Brazhivka", "dergachi", "dmytrivka","dovhenke", "Drujne", "irpin", "izum", "kamjanske","kreminna", "lyman", "lyman2", "novodru", "novomyha", "novotoshiv", "nurkove", "osokorivka", "poltavka", "popasna", "prud","prudne", 'rogan', "rubizhne", "rubzi", "severodoneck", "siversk", "sviatohirsk", "svitanok", "toshkivka", "travneve", "velyka_komysha", "velyka_olexan", "vilhivka", "volnovakha", "vrubivka", "yagidne", "udy","bila_krynyz","bila_krynyz2"]
 
 const limits = {
-    'dmytrivka': [30.1757653834394048,50.4108237576306948,30.2817654637024489,50.5286078919058284],
-    'irpin': [30.0026654838079381,50.4621881806920669,30.4302610825765854,50.6402713180371578],
-    'severodoneck': [38.3957238594277968,48.9225949548412160,38.5664048439014522,48.9910195957576917],
-    'izum': [37.2096495735259651,49.1224990970269673,37.3066673915239377,49.3348602745883156],
-    'Brazhivka': [37.2028126287910297,48.9848515750602758,37.2585110972821596,49.0496557099395716],
-    'Drujne': [33.1765338286155256,46.3497557357709269,33.2519912590703939,46.5626424951541651]
+    'avdiivka': [37.7000127083201519, 48.1070819136680896, 37.7849785958121771, 48.1564331450303698698],
+    "borodjanka":[29.8448465273915922,50.6047076985402313,29.9950521080641437,50.6856658549185113],
+    "Brazhivka":[37.1794583133839538,48.9793601212279910, 37.2769750101413706,49.0567210841285828],
+    "dergachi":[36.0622409531529442,50.0471914837438661,36.2127137676998885,50.1497648483211478],
+    "dmytrivka":[30.1649865788770555,50.4022613952474074,30.2910067718371394,50.5320334369891597],
+    "dovhenke":[37.2931710704088317,49.0040472844253614,37.3321126078299130,49.0400334373100222],
+    "Drujne":[33.1729409117679737,46.3252394765695996,33.2541174781829056,46.5737596897269412],
+    "irpin":[29.9649341806415563,50.4509867791130588,30.4408769790402047,50.6573592698272392],
+    "izum":[37.1898873315068741,49.1167653986215171,37.3364693192619370,49.3512483628889171],
+    "kamjanske":[35.3386674319814560,47.4735852963296949,35.4249550635695201,47.5573577241726184],
+    "lyman":[37.8773633936559548,48.9622854659062270,37.9761871903847492,49.0776462988330024],
+    "lyman2":[37.7415660152026788,48.9064344930848165,37.8616852274914066,49.0646758567272272],
+    "novodru":[38.2634246384922676,48.9199401327312486,38.4775946033522516,49.0449790388553026],
+    "novomyha":[37.4898397506243342,47.8386248849396551,37.5272442207996519,47.8652280339095668],
+    "novotoshiv":[38.5882266642057985,48.6612482024040460,38.7478782996952944,48.8370678180918674],
+    "nurkove":[38.2388867203949872,48.5873073426811075,38.3473798936229500,48.7831767251534458],
+    "osokorivka":[33.9034075231004053,47.3035260314481363,33.9933848385365494,47.4650681681974760],
+    "poltavka":[36.4112295828388213,47.6498714066138191,36.5078506151252569,47.7814419680460816],
+    "popasna":[38.3146096623865020,48.5932402881078502,38.4350609602111106,48.6710277606223158],
+    "prud":[36.1209680831915776,50.1798718786264359,36.2281760033144380,50.2819387574795797],
+    "prudne":[36.6518313008676984,47.6778580427088130,36.7218781289053098,47.7844413831367589],
+    "rogan":[36.3805231685707398,49.8468130401013170,36.5937957197733326,49.9545588765289992],
+    "rubizhne":[38.4972772507354151,48.8323641681453182,38.5866519988167909,48.9858759818138978],
+    "rubzi":[37.4870331869407707,49.1146051300459803,37.5778084038554923,49.2423052639345187],
+    "severodoneck":[38.3867402198814816,48.9088609839214357,38.5869151758876683,49.0134140849032818],
+    "siversk":[37.9988203437339891,48.8566534434690212,38.1000617119760037,48.9358538915002157],
+    "sviatohirsk":[37.5224440944422000,49.0165834688911985,37.6121944420178878,49.0664621778647572],
+    "svitanok":[36.3716122953075711,49.8340708164824306,36.5850926033795218,49.9503877721301563],
+    "toshkivka":[38.5110526347111062,48.7563771964873638,38.6403702662752906,48.8148466881112029],
+    "travneve":[38.0525287664252190,48.3575329549852313,38.1535534351301564,48.495372378707301],
+    "velyka_komysha":[36.9565983662555979,49.0398170779346145,37.0672432164678440,49.1284092726374695],
+    "velyka_olexan":[33.2324794554917631,47.2218738308282440,33.3324412227346727,47.3777289349900954],
+    "vilhivka":[36.4390494765709576,49.9161182868692492,36.5530575431855240,50.0515993541305519],
+    "volnovakha":[37.4498549116296502,47.5332802688589169,37.5517561572451726,47.6328576002518105],
+    "vrubivka":[38.3401098262859890,48.7126601658396936,38.4147285749856877,48.7867464559358552],
+    "yagidne":[31.2069166655722618,51.2796894652722273,31.3240653544354508,51.4046195633956700],
+    "udy":[	35.9596289476752204,50.3504871209552363,36.1759436054187518,50.4361040935725029	],
+    "kreminna":	[38.1592132886455531,49.0085238101820977, 38.3025332958969358,49.0930336851904556],
+    "bila_krynyz":	[33.0235189814541172,47.1659455809499804, 33.0614545307143928,47.1897863633804278],
+    "bila_krynyz2":[33.1224416252472267,47.1504771075490368,33.2271121364070154,47.2616203695602408]
 }
-
-// const layers = [
-//     // "dmytrivka",
-//     'irpin', 
-//     'severodoneck'
-// ]
 
 
 map.on('load', () => {
@@ -115,24 +130,15 @@ map.on('load', () => {
             'id': LAYER, 
             'type': 'raster', 
             'source': LAYER+ "_s", 
-            "minzoom": 16, 
+            "minzoom": 14, 
             "maxzoom": 19 
-        });
-
-
-
-
+        }, firstLabelLayerId);
 
 }
    
+    map.addSource("polygons", {"type": "geojson", 'data': "data/rects/reprojected/grid_all.geojson"});
+    map.addSource("big-polygons", {"type": "geojson", 'data': "data/borders_pretty.geojson"});
 
-
-
-
-    map.addSource("polygon", {
-        "type": "geojson",
-        'data': "data/rects/reprojected/grid_all.geojson"
-    });
 
     //polygon stroke
     map.addLayer({
@@ -140,12 +146,8 @@ map.on('load', () => {
         "minzoom": 5,
         "maxzoom": 16,
         'type': 'fill',
-        "source": "polygon",
-        'paint': {
-            'fill-color': '#F26344',
-            'fill-opacity': 0.1
-            // 'line-width': 2
-        }
+        "source": "polygons",
+        'paint': { 'fill-color': '#F26344', 'fill-opacity': 0.1 }
     });
 
     map.addLayer({
@@ -153,12 +155,18 @@ map.on('load', () => {
         "minzoom": 5,
         "maxzoom": 19,
         'type': 'line',
-        "source": "polygon",
-        'paint': {
-            'line-color': '#F26344',
-             'line-width': 2
-        }
-    });
+        "source": "polygons",
+        'paint': {'line-color': '#F26344', 'line-width': 2 }
+    },firstLabelLayerId);
+
+    map.addLayer({
+        "id": "big-polygons-stroke",
+        "minzoom": 5,
+        "maxzoom": 8,
+        'type': 'line',
+        "source": "big-polygons",
+        'paint': {'line-color': '#F26344', 'line-width': 2 }
+    },firstLabelLayerId);
 
     // var satelite = L.tileLayer('https://thallium.texty.org.ua/maps/destruction/irpin/{z}/{x}/{y}.webp', {
     //     maxZoom: 19,
@@ -168,55 +176,9 @@ map.on('load', () => {
 
 })
 
-
-
-
-
-// var south_west = L.latLng(50.415150, 30.178960),
-//     north_east = L.latLng(50.535150, 30.238960);
-// var bounds = L.latLngBounds(south_west, north_east);
-
-
-
-// map.on('click', function(e){
-//   var coord = e.latlng;
-//   var lat = coord.lat;
-//   var lng = coord.lng;
-//   console.log(lat + "," + lng);
-//   });
-
-// var geoJsonLayer;
-
-// function flyToLocation(dataValue){
-//     map.flyTo(dictionary[dataValue].coords, 12);
-// }
-
-// var exteriorStyle = {
-//     weight: 3,
-//     fillOpacity: 0,
-//     opacity: 0.7,
-//     fillColor: "#00FF00",
-//     color: "red"
-   
-// };
-
-
-/* полігон з окупованими територіями */
-// $.getJSON("data/rects/reprojected/grid_all.geojson",function(military){
-//    geoJsonLayer = L.geoJson(military);     
-//         map.addLayer(geoJsonLayer);
-//         geoJsonLayer.setStyle(exteriorStyle);
-// });
-
-// $.getJSON("data/rects/reprojected/dmytrivka.geojson",function(military){
-//     var geoJsonLayer = L.geoJson(military, { style: function(){ return exteriorStyle}} );     
-//         map.addLayer(geoJsonLayer);
-//         geoJsonLayer.setStyle(exteriorStyle);
-// });
-
-//    map.on("zoom", function(){
-//     console.log(map.getZoom())
-//    })
+   map.on("zoom", function(){
+    console.log(map.getZoom())
+   })
 
 
 
