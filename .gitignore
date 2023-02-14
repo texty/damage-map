@@ -1,0 +1,13 @@
+archive/
+*.vscode
+.DS_Store
+*.idea
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.R
+*.Rhistory

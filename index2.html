@@ -57,8 +57,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZXZnZXNoYWRyb3pkb3ZhIiwiYSI6ImNqMjZuaGpkYTAwM
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'data/osm_liberty.json',
-    center: [ 38.5, 49.0],
-    zoom: 10,
+    center: [ 37.2782, 49.191],
+    zoom: 15.9,
     pitch: 0,
     minZoom: 5,
     maxZoom: 18,
@@ -136,7 +136,7 @@ map.on('load', () => {
 
 }
    
-    map.addSource("polygons", {"type": "geojson", 'data': "data/rects/reprojected/grid_all.geojson"});
+    map.addSource("polygons", {"type": "geojson", 'data': "data/grid_all.geojson"});
     map.addSource("big-polygons", {"type": "geojson", 'data': "data/borders_pretty.geojson"});
 
 
@@ -163,9 +163,17 @@ map.on('load', () => {
         "id": "big-polygons-stroke",
         "minzoom": 5,
         "maxzoom": 8,
-        'type': 'line',
+        'type': 'circle',
         "source": "big-polygons",
-        'paint': {'line-color': '#F26344', 'line-width': 2 }
+        'paint': {
+            'circle-radius': 5,
+            'circle-color': '#F26344', 
+            'circle-opacity': 0.3,
+            "circle-stroke-width": 1,
+            "circle-stroke-color": "#F26344"
+            //'line-color': '#F26344', 
+            //'line-width': 2 
+    }
     },firstLabelLayerId);
 
     // var satelite = L.tileLayer('https://thallium.texty.org.ua/maps/destruction/irpin/{z}/{x}/{y}.webp', {
@@ -187,3 +195,5 @@ map.on('load', () => {
     
 </body>
 </html>
+
+        

@@ -4,11 +4,13 @@
     <title>Road AccidentsIncidents</title>
         <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
         <script src="https://unpkg.com/h3-js@^3.0.0"></script>
-        <script src="https://unpkg.com/deck.gl@^8.0.0/dist.min.js"></script>
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <script src="https://unpkg.com/deck.gl@~7.3.2/dist.min.js"></script>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
 
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.css" rel="stylesheet" />
-        <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+
         <style type="text/css">
         #map { position:absolute; top:0; bottom:0; width:100%; }
         body {
@@ -35,11 +37,28 @@
             display: inline-block;
             width: 140px;
         }
+
+        #tooltip {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        background-color: white;
+        visibility: visible;
+        padding: 5px;
+        font-size: 12px;
+      }
         </style>
 </head>
 
 <body>
 <div id="map"></div>
+<div id='tooltip'><div>
+
+
+
+
+  
 </body>
 <script type="text/javascript">
 
@@ -55,17 +74,18 @@ const powScale = d3.scalePow()
             }
 
         var color = d3.scaleLinear()
-            .domain([10, 20, 30, 35, 45])
-            .range(["#eee1e1", "#f0b8b9", "#e67c7d", "#c44b4d", "#ac2123"]);
+            .domain([5, 10, 15, 30, 35, 45])
+            .range(["white","#eee1e1", "#f0b8b9", "#e67c7d", "#c44b4d", "#ac2123"]);
 
         var color2 = d3.scaleLinear()
-            .domain([10, 20, 30, 35, 45])
-            .range(["#eee1e1", "#f0b8b9", "#e67c7d", "#c44b4d", "#ac2123"]);
+            .domain([14, 18, 25, 30, 35, 45])
+            .range(["white","#eee1e1", "#f0b8b9", "#e67c7d", "#c44b4d", "#ac2123"]);
 
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZXZnZXNoYWRyb3pkb3ZhIiwiYSI6ImNqMjZuaGpkYTAwMXAzMm5zdGVvZ2c0OHYifQ.s8MMs2wW15ZyUfDhTS_cdQ';
 
 var { MapboxLayer, HexagonLayer, MapboxLayer, ScatterplotLayer, H3HexagonLayer } = deck;
+const H3_ROOT = 'https://raw.githubusercontent.com/samoylich/damage_map_data/main/';
 
 //Create the Mapbox map
 var map = new mapboxgl.Map({
@@ -74,94 +94,158 @@ var map = new mapboxgl.Map({
     center: [ 39.1, 48.5],
     zoom: 10,
     pitch: 60,
-    antialias: true
+    minZoom: 5,
+    maxZoom: 11,
+    antialias: true,
 });
 
-// Get Data for visual
-var DATA_URL = 'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/3d-heatmap/heatmap-data.csv';
+var hexagonLayer;
 
-//Create the deck.gl hexagon layer and style for the data
-var COLOR_RANGE = [
-    [1, 152, 189],
-    [73, 227, 206],
-    [216, 254, 181],
-    [254, 237, 177],
-    [254, 173, 84],
-    [209, 55, 78]
-];
-var LIGHT_SETTINGS = {
-    lightsPosition: [-0.144528, 49.739968, 8000, -3.807751, 54.104682, 8000],
-    ambientRatio: 0.4,
-    diffuseRatio: 0.6,
-    specularRatio: 0.2,
-    lightsStrength: [0.8, 0.0, 0.8, 0.0],
-    numberOfLights: 2
-};
+var h3_layers_7 = [ "kharkiv_7", "dnipro_7", "donetsk_7", "lugansk_7", "zaporizia_7", "kherson_7", "mykolaiv_7"]
+
+var h3_layers_9 = ["kharkiv_9", "dnipro_9", "donetsk_9", "lugansk_9", "zaporizia_9", "kherson_9", "mykolaiv_9"]
+
+map.on("zoom", function(e){
+  const zoom = e.target.getZoom();
+
+  if(zoom <= 9){
+      map.setPitch(0);
+      h3_layers_9.forEach(function(layer){
+        map.setLayoutProperty(layer, 'visibility', 'none');
+      })
+      h3_layers_7.forEach(function(layer){
+        map.setLayoutProperty(layer, 'visibility', 'visible');
+      })
+   
+  } else {
+      map.setPitch(60);
+      h3_layers_9.forEach(function(layer){
+        map.setLayoutProperty(layer, 'visibility', 'visible');
+      })
+      h3_layers_7.forEach(function(layer){
+        map.setLayoutProperty(layer, 'visibility', 'none');
+      })
+   
+  }
+  
+}
+);
+
 
 var hexagonLayer;
+
+var h3_layers_7 = ["kyiv_7", "sumy_7", "kharkiv_7", "dnipro_7", "donetsk_7", "lugansk_7", "zaporizia_7", "kherson_7", "mykolaiv_7", "odesa_7"]
+
+var h3_layers_9 = ["kyiv_9", "sumy_9", "kharkiv_9", "dnipro_9", "donetsk_9", "lugansk_9", "zaporizia_9", "kherson_9", "mykolaiv_9", "odesa_9"]
 
 //Add the deck.gl Custom Layer to the map once the Mapbox map loads
 map.on('load', () => {
     const firstLabelLayerId = map.getStyle().layers.find(layer => layer.type === 'symbol').id;
 
-
-      map.addLayer({
-        'id': '3d-buildings',
-        'source': 'composite',
-        'source-layer': 'building',
-        'filter': ['==', 'extrude', 'true'],
-        'type': 'fill-extrusion',
-        'minzoom': 15,
-        'paint': {
-            'fill-extrusion-color': '#aaa',
-
-            // use an 'interpolate' expression to add a smooth transition effect to the
-            // buildings as the user zooms in
-            'fill-extrusion-height': [
-                "interpolate", ["linear"], ["zoom"],
-                15, 0,
-                15.05, ["get", "height"]
-            ],
-            'fill-extrusion-base': [
-                "interpolate", ["linear"], ["zoom"],
-                15, 0,
-                15.05, ["get", "min_height"]
-            ],
-            'fill-extrusion-opacity': .6
-        }
-      }, firstLabelLayerId);
-
-      map.addLayer(new MapboxLayer({
-        id: 'deckgl-circle',
-        type: ScatterplotLayer,
-        data: [
-          {position: [-122.402, 37.79], color: [255, 0, 0], radius: 1000}
-        ],
-        getPosition: d => d.position,
-        getFillColor: d => d.color,
-        getRadius: d => d.radius,
-        opacity: 0.3
-      }), firstLabelLayerId);
+    for(LAYER of h3_layers_9 ){
 
 
-      map.addLayer(new MapboxLayer({
-        id: 'h3',
+      var LAYER = map.addLayer(new MapboxLayer({
+        id: LAYER,
         type: H3HexagonLayer,
-        data: 'https://raw.githubusercontent.com/samoylich/damage_map_data/main/lugansk_9.json', 
-           
-            elevationScale: 2.5,
-            extruded: true,
-            filled: true,
-            getElevation: d => powScale(d.count),
-            getFillColor: d => getRGB(color2(d.count)),
-            getHexagon: d => d.hex,
-            wireframe: false,
-            pickable: true,
-            visible: true,
-            opacity: 1
+        data: H3_ROOT + LAYER +'.json', 
+        pickable: true,
+        elevationScale: 2.5,
+        extruded: true,
+        filled: true,
+        getElevation: d => powScale(d.count),
+        getFillColor: d => getRGB(color2(d.count)),
+        getHexagon: d => d.hex,
+        wireframe: false,
+        pickable: true,
+        visible: true,
+        opacity: 1,
+        //onClick: (info, event) => console.log('пошкоджено:', info.object.count),
+        onClick: function(info, event){
+            if(info.color != null && info.object.count > 0){
+                showTooltip(info)
+            } else {
+                d3.select('#tooltip').style("display", "none")
+            }
+        }
       }), firstLabelLayerId);
+
+      }
+
+
+      for(LAYER of h3_layers_7 ){
+
+
+       map.addLayer(new MapboxLayer({
+          id: LAYER,
+          type: H3HexagonLayer,
+          data: H3_ROOT + LAYER +'.json', 
+          pickable: true,
+          // elevationScale: 2.5,
+          // extruded: true,
+          filled: true,
+          //getElevation: d => powScale(d.count),
+          getFillColor: d => getRGB(color(d.count)),
+          getHexagon: d => d.hex,
+          wireframe: false,
+          pickable: true,
+          visible: true,
+          opacity: 1,
+        }), firstLabelLayerId);
+
+}
+
+// map.addLayer(new MapboxLayer({
+//           id: "lugansk6",
+//           type: H3HexagonLayer,
+//           data: 'lugansk_6.json', 
+//           pickable: true,
+//           // elevationScale: 2.5,
+//           // extruded: true,
+//           filled: true,
+//           //getElevation: d => powScale(d.count),
+//           getFillColor: d => getRGB(color(d.count)),
+//           getHexagon: d => d.hex,
+//           wireframe: false,
+//           pickable: true,
+//           visible: true,
+//           opacity: 1,
+//         }), firstLabelLayerId);
+
+h3_layers_7.forEach(function(layer){
+        map.setLayoutProperty(layer, 'visibility', 'none');
+      })
+
+
+
+
+
+
 
     });
+
+
+
+function showTooltip(info){
+        d3.select('#tooltip')
+          .style('top', info.y)
+          .style('left', info.x)
+          //.style('visibility', "visible")
+          .style('opacity', 1)
+          .html(`пошкоджено: ${info.object.count.toFixed(1)} %`)
+        
+          .transition()
+          .duration(1000)
+          .on("end", function(){
+            d3.select('#tooltip').style('opacity', 0)
+
+          })
+          
+          //.style('opacity', 0)
+        ;
+
+          //.html(`пошкоджено:  %`)
+      }
 
 
 

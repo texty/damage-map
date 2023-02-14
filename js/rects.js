@@ -61,36 +61,35 @@ var exteriorStyle = {
    
 };
 
-var geoJsonLayer;
 
 /* полігон з окупованими територіями */
-$.getJSON("data/rects/reprojected/irpin.geojson",function(military){
-    geoJsonLayer = L.geoJson(military, { style: function(){ return exteriorStyle}} );     
-    mymap.addLayer(geoJsonLayer);
+$.getJSON("data/rects/reprojected/grid_all.geojson", function(military){
+    geoJsonLayer = L.geoJson(military, { } );     
+         mymap.addLayer(geoJsonLayer);
          geoJsonLayer.setStyle(exteriorStyle);
  });
  
 
 function flyToLocation(dataValue){
     
-    mymap.removeLayer(geoJsonLayer);
-    mymap.removeLayer(satelite)
+    // mymap.removeLayer(geoJsonLayer);
+    //mymap.removeLayer(satelite)
 
-    $.getJSON("data/rects/reprojected/" + dictionary[dataValue].squares + ".geojson", 
-        function(military){
-            geoJsonLayer = L.geoJson(military, { 
-                style: function(){ return exteriorStyle }
-            });
-            geoJsonLayer.setStyle(exteriorStyle) 
-            mymap.addLayer(geoJsonLayer);
-        });
+    // $.getJSON("data/rects/reprojected/" + dictionary[dataValue].squares + ".geojson", 
+    //     function(military){
+    //         geoJsonLayer = L.geoJson(military, { 
+    //             style: function(){ return exteriorStyle }
+    //         });
+    //         geoJsonLayer.setStyle(exteriorStyle) 
+    //         mymap.addLayer(geoJsonLayer);
+    //     });
 
-    satelite = L.tileLayer(TILES_ROOT + dictionary[dataValue].tiles  + '/{z}/{x}/{y}.webp', {
-        maxZoom: 19,
-        minZoom: 16,
-        attribution: '© Planet.com'
-    })
-    satelite.addTo(mymap);
+    // satelite = L.tileLayer(TILES_ROOT + dictionary[dataValue].tiles  + '/{z}/{x}/{y}.webp', {
+    //     maxZoom: 19,
+    //     minZoom: 16,
+    //     attribution: '© Planet.com'
+    // })
+    // satelite.addTo(mymap);
 
 
     mymap.flyTo(dictionary[dataValue].coords, 12);
