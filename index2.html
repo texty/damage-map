@@ -5,13 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tiles</title>
+    <link rel='stylesheet' href='https://texty.org.ua/documents/310/mapbox-gl-v2.6.0.css'/>
 
 
     <script src="libs/jquery-1.11.1.js"></script>
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
-
-    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://texty.org.ua/documents/311/mapbox-gl-v2.6.0.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
+
+
+    <!-- <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script> -->
+    
+
+    <!-- <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.css" rel="stylesheet" /> -->
     <!-- <link rel="stylesheet" href="libs/leaflet.1.0.3.css"/>
 
      <script src="libs/leaflet.1.0.3.js"></script>
@@ -22,6 +27,10 @@
 
 </head>
 <style>
+    body {
+        background-color: #eeeff1;
+    }
+
     #map-container {
         display: grid;
         grid-template-columns: 1fr 4fr;
@@ -41,8 +50,34 @@
         width: 200px;
         background-color: blanchedalmond;
     }
+
+    #title {
+        font-size: 56px;  
+        text-align: center;
+        position: sticky;
+        top: 0;
+        left: 0;
+    }
+
+    #cover-img {
+        width: 100%;
+    }
 </style>
 <body>
+    <div id="header">
+        <h1 id="title">Назва про зруйновані будівлі</h1>
+        <img id='cover-img' src="cover.png"/>
+    </div>
+
+    <p style="max-width: 600px; margin: 50px auto; font-size: 20px;">
+        23 лютого в Маріуполі було тепло, десь +15, це не звично навіть для південного міста. І незвичайно тихий. Такий тихий, що аж моторошно. Можливо, це відчуття тривоги, яке ширилось містом того вечора, виникло не просто так. Дуже дивні речі напередодні відбувались в окупованому Донецьку. Тривоги, якісь незрозумілі обстріли, примусова евакуація людей.
+    </p>
+
+    <img style="display: block; max-width: 1000px; margin:auto;" src="examples.jpg"/>
+
+    <p style="max-width: 600px; margin: 50px auto; font-size: 20px;">
+        23 лютого в Маріуполі було тепло, десь +15, це не звично навіть для південного міста. І незвичайно тихий. Такий тихий, що аж моторошно. Можливо, це відчуття тривоги, яке ширилось містом того вечора, виникло не просто так. Дуже дивні речі напередодні відбувались в окупованому Донецьку. Тривоги, якісь незрозумілі обстріли, примусова евакуація людей.
+    </p>
       
      <div id="map"></div>
    
@@ -62,9 +97,22 @@ var map = new mapboxgl.Map({
     pitch: 0,
     minZoom: 5,
     maxZoom: 18,
+    hash: false,
+    tap: false,
+    attributionControl: false,
+    cooperativeGestures: true,
+        locale: {            
+            "ScrollZoomBlocker.CtrlMessage": "Щоб змінити масштаб карти, прокручуйте коліщатко миші утримуючи CTRL",
+            "ScrollZoomBlocker.CmdMessage": "Щоб змінити масштаб карти, прокручуйте коліщатко миші утримуючи ⌘",
+            "TouchPanBlocker.Message": "Use two fingers to move the map",
+          }, 
 
     antialias: true
 });
+
+map.dragRotate.disable();
+map.touchZoomRotate.disableRotation();
+
 
 const layers = ["avdiivka", "borodjanka", "Brazhivka", "dergachi", "dmytrivka","dovhenke", "Drujne", "irpin", "izum", "kamjanske","kreminna", "lyman", "lyman2", "novodru", "novomyha", "novotoshiv", "nurkove", "osokorivka", "poltavka", "popasna", "prud","prudne", 'rogan', "rubizhne", "rubzi", "severodoneck", "siversk", "sviatohirsk", "svitanok", "toshkivka", "travneve", "velyka_komysha", "velyka_olexan", "vilhivka", "volnovakha", "vrubivka", "yagidne", "udy","bila_krynyz","bila_krynyz2"]
 
@@ -136,14 +184,17 @@ map.on('load', () => {
 
 }
    
-    map.addSource("polygons", {"type": "geojson", 'data': "data/grid_all.geojson"});
-    map.addSource("big-polygons", {"type": "geojson", 'data': "data/borders_pretty.geojson"});
+    map.addSource("polygons", {"type": "geojson", 'data': "data/grid_all2.geojson"});
+    map.addSource("circles", {"type": "geojson", 'data': "data/borders_pretty.geojson"});
+    map.addSource("images", {"type": "geojson", 'data': "data/borders.geojson"});
+
+
 
 
     //polygon stroke
     map.addLayer({
         "id": "fill-layer",
-        "minzoom": 5,
+        "minzoom": 10,
         "maxzoom": 16,
         'type': 'fill',
         "source": "polygons",
@@ -152,7 +203,7 @@ map.on('load', () => {
 
     map.addLayer({
         "id": "stroke-layer",
-        "minzoom": 5,
+        "minzoom": 10,
         "maxzoom": 19,
         'type': 'line',
         "source": "polygons",
@@ -164,7 +215,7 @@ map.on('load', () => {
         "minzoom": 5,
         "maxzoom": 8,
         'type': 'circle',
-        "source": "big-polygons",
+        "source": "circles",
         'paint': {
             'circle-radius': 5,
             'circle-color': '#F26344', 
@@ -175,6 +226,45 @@ map.on('load', () => {
             //'line-width': 2 
     }
     },firstLabelLayerId);
+
+    map.addLayer({
+        "id": "images_layer",
+        "minzoom": 8,
+        "maxzoom": 14,
+        'type': 'fill',
+        "source": "images",
+        'paint': {
+            'fill-color': '#F26344', 
+            'fill-opacity': 0.08
+    }
+    },firstLabelLayerId);
+
+    map.addLayer({
+        "id": "dates_layer",
+        "minzoom": 8,
+        "maxzoom": 10,
+        'type': 'symbol',
+        "source": "circles",
+        'layout': {
+            'text-field': [
+                "concat",
+                "знімок: ",
+                ['get', 'date']
+            ],
+            'text-anchor': "center",
+            'text-radial-offset': 0.5,
+            'text-justify': 'auto',
+            'text-size': 11
+
+            },
+        'paint': {
+            'text-color': 'black', 
+            "text-halo-color": "rgba(225,225,0,0.5)",
+            "text-halo-width": 1
+            
+             
+        }
+    });
 
     // var satelite = L.tileLayer('https://thallium.texty.org.ua/maps/destruction/irpin/{z}/{x}/{y}.webp', {
     //     maxZoom: 19,
